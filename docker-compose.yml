@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  # Service 1: Database (PostgreSQL)
+  db:
+    image: postgres:15-alpine
+    container_name: wifi_db
+    restart: always
+    environment:
+      POSTGRES_USER: wifi_admin
+      POSTGRES_PASSWORD: password_rahasia_banget # Change this in production!
+      POSTGRES_DB: wifi_monitor_db
+    volumes:
+      - pgdata:/var/lib/postgresql/data # Persist data to a volume so it survives restarts
+    # In production, do not expose DB ports globally unless necessary
+    # ports:
+    #   - "5432:5432"
+
+  # Service 2: Application (Express API)
+  app:
+    build: .
+    container_name: wifi_app
+    restart: always
+    ports:
+      - '3000:3000' # Map Host Port : Container Port
+    depends_on:
+      - db # Ensure database starts before the app
+    environment:
+      # Connection string referencing the 'db' service name as host
+      DATABASE_URL: postgres://wifi_admin:password_rahasia_banget@db:5432/wifi_monitor_db?schema=public
+      PORT: 3000
+
+volumes:
+  pgdata: # Named volume for database persistence
