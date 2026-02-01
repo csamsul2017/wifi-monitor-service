@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const { PrismaClient } = require('@prisma/client');
 const { nanoid } = require('nanoid');
 
@@ -6,18 +7,17 @@ const app = express();
 const prisma = new PrismaClient();
 const port = 3000;
 
+app.use(cors());
 app.use(express.json());
 
 app.post('/customer', async (req, res) => {
-  const { name, age, gender, email, phone_number } = req.body;
+  const { gender, email, phone_number } = req.body;
   const customer_id = `customer-${nanoid(16)}`;
 
   try {
     const newCustomer = await prisma.customer.create({
       data: {
         customer_id,
-        name,
-        age,
         gender,
         email,
         phone_number,
