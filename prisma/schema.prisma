@@ -13,7 +13,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Customer {
+model customer {
   customer_id   String  @id
   gender        String
   email         String  @unique

@@ -32,6 +32,15 @@ app.post('/customer', async (req, res) => {
   }
 });
 
+app.get('/customer', async (req, res) => {
+  try {
+    const customers = await prisma.customer.findMany();
+    res.send(customers);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed gets customer' });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
