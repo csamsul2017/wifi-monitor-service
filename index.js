@@ -12,16 +12,22 @@ app.use(cors());
 app.use(express.json());
 
 app.post('/customer', async (req, res) => {
-  const { gender, email, phone_number } = req.body;
+  const { name, gender, email, phone_number, device, menu, location } = req.body;
   const customer_id = `customer-${nanoid(16)}`;
+  const createAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
   try {
     const newCustomer = await prisma.customer.create({
       data: {
         customer_id,
+        name,
         gender,
         email,
         phone_number,
+        device,
+        menu,
+        location,
+        createAt,
       },
     });
     res.status(201).json({
@@ -29,6 +35,7 @@ app.post('/customer', async (req, res) => {
       data: newCustomer,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: 'Failed to save customer' });
   }
 });

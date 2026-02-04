@@ -15,7 +15,12 @@ datasource db {
 
 model customer {
   customer_id   String  @id
+  name          String
   gender        String
-  email         String  @unique
+  email         String
   phone_number  String
+  device        String
+  menu          String
+  location      String
+  createAt      String
 } 
